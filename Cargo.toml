@@ -1,0 +1,54 @@
+[package]
+name = "bandpill"
+version = "1.0.0"
+edition = "2021"
+authors = ["Akram Bel <akram@example.com>"]
+description = "A sleek, lightweight Windows 11 bandwidth tracker and anti-leak shield written in pure Rust."
+readme = "README.md"
+license = "MIT"
+repository = "https://github.com/akram/bandpill"
+keywords = ["windows11", "bandwidth", "data-saver", "taskbar-pill", "network-monitor"]
+categories = ["network-programming", "gui", "os::windows-apis"]
+
+[lib]
+name = "bandpill"
+path = "src/lib.rs"
+
+[[bin]]
+name = "BandPill"
+path = "src/main.rs"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = "0.4"
+windows = { version = "0.58", features = [
+    "Win32_Foundation",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_Graphics_Gdi",
+    "Win32_Graphics_Dwm",
+    "Win32_UI_Shell",
+    "Win32_System_Registry",
+    "Win32_System_Threading",
+    "Win32_System_ProcessStatus",
+    "Win32_System_Services",
+    "Win32_NetworkManagement_IpHelper",
+    "Win32_NetworkManagement_Ndis",
+    "Win32_Networking_WinSock",
+    "Win32_UI_HiDpi",
+    "Win32_Media_Audio",
+    "Win32_Storage_FileSystem",
+    "Win32_System_Diagnostics_ToolHelp",
+    "Win32_System_SystemInformation"
+] }
+
+[build-dependencies]
+winres = "0.1"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

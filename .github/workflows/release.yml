@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    name: Build & Package Windows Release
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build Release Binary
+        run: cargo build --release --locked
+
+      - name: Create Release Archive
+        shell: powershell
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          $distName = "BandPill-$tag-windows-x86_64"
+          New-Item -ItemType Directory -Path $distName
+          Copy-Item target\release\BandPill.exe $distName\
+          Copy-Item README.md $distName\
+          Copy-Item LICENSE $distName\
+          Compress-Archive -Path $distName -DestinationPath "$distName.zip"
+          Write-Output "RELEASE_ZIP=$distName.zip" >> $env:GITHUB_ENV
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.RELEASE_ZIP }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true

@@ -1,0 +1,20 @@
+# Rust build artifacts
+target/
+**/*.rs.bk
+*.pdb
+
+# Local data & logs
+local_data/
+*.log
+crash.log
+out.txt
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+
